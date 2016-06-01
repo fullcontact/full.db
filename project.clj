@@ -1,4 +1,4 @@
-(defproject fullcontact/full.db "0.9.1-SNAPSHOT"
+(defproject fullcontact/full.db "0.10.0-SNAPSHOT"
   :description "DB sugar (Korma + HarikiCP + core.async)."
   :url "https://github.com/fullcontact/full.db"
   :license {:name "Eclipse Public License - v 1.0"
