@@ -8,6 +8,7 @@
             [full.metrics :refer [timeit gauge]])
   (:import (java.util.concurrent Executors)))
 
+
 ; See https://github.com/tomekw/hikari-cp#configuration-options
 ; for description of config options.
 (def ^:private adapter (opt [:db :adapter] :default "mysql"))
@@ -29,6 +30,7 @@
 (def ^:private leak-detection-threshold (opt [:db :leak-detection-threshold] :default 0))
 (def ^:private register-mbeans (opt [:db :register-mbeans] :default false))
 (def ^:private data-source-properties (opt [:db :properties] :default {}))
+
 
 (def db-specs {"firebird" kdb/firebird
                "postgres" kdb/postgres
