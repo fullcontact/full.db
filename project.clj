@@ -10,7 +10,11 @@
                  [hikari-cp "1.5.0"]
                  [fullcontact/full.core "0.9.0"]
                  [fullcontact/full.metrics "0.9.0"]
-                 [fullcontact/full.async "0.9.0"]]
+                 [fullcontact/full.async "0.9.0"]
+                 [org.liquibase/liquibase-core "3.3.5"]
+                 [com.mattbertolini/liquibase-slf4j "1.2.1"
+                  :exclusions [org.slf4j/slf4j-api
+                               org.yaml/snakeyaml]]]
   :aot :all
   :plugins [[lein-midje "3.1.3"]]
   :profiles {:dev {:dependencies [[midje "1.7.0"]]}})
