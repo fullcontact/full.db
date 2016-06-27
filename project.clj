@@ -1,5 +1,5 @@
 (defproject fullcontact/full.db "0.10.1-SNAPSHOT"
-  :description "DB sugar (Korma + HarikiCP + core.async)."
+  :description "DB sugar (Korma + hikariCP + core.async)."
   :url "https://github.com/fullcontact/full.db"
   :license {:name "Eclipse Public License - v 1.0"
             :url "http://www.eclipse.org/legal/epl-v10.html"
@@ -8,8 +8,8 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [korma "0.4.2"]
                  [hikari-cp "1.5.0"]
-                 [fullcontact/full.core "0.10.0"]
-                 [fullcontact/full.metrics "0.10.0"]
+                 [fullcontact/full.core "0.10.1"]
+                 [fullcontact/full.metrics "0.10.1"]
                  [fullcontact/full.async "0.9.0"]
                  [org.liquibase/liquibase-core "3.3.5"]
                  [com.mattbertolini/liquibase-slf4j "1.2.1"
