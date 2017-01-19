@@ -66,7 +66,7 @@
                 :register-mbeans @register-mbeans}
         ds (make-datasource config)]
     (doseq [[prop val] @data-source-properties]
-      (.addDataSourceProperty ds (name prop)  val))
+      (.addDataSourceProperty ds (name prop) val))
     (default-connection
       {:pool {:datasource ds}
        :options (extract-options (spec {}))})))
@@ -108,11 +108,10 @@
 
 (defmacro do-async
   [& body]
-  `(let [g# {:service "full.db.do-async/gauge"}]
+  `(let [g# "full.db.do-async/gauge"]
      (gauge g# (swap! do-async-gauge inc))
      (thread-call
        (fn []
-
          (try
            (with-db @db ~@body)
            (catch Throwable e# e#)
@@ -120,8 +119,7 @@
              (gauge g# (swap! do-async-gauge dec))))))))
 
 (defmacro do-async-timeit
-  [event & body]
+  [k & body]
   `(do-async
-     (timeit {:service ~event
-              :tags ["db"]}
+     (timeit ~k
              ~@body)))

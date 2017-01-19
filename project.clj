@@ -9,7 +9,7 @@
                  [korma "0.4.2"]
                  [hikari-cp "1.5.0"]
                  [fullcontact/full.core "0.10.1" :exclusions [org.clojure/clojurescript]]
-                 [fullcontact/full.metrics "0.10.2"]
+                 [fullcontact/full.metrics "0.11.4"]
                  [fullcontact/full.async "0.9.0"]
                  [org.liquibase/liquibase-core "3.3.5"]
                  [com.mattbertolini/liquibase-slf4j "1.2.1"
