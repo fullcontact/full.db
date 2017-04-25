@@ -6,7 +6,8 @@
             [hikari-cp.core :refer [make-datasource]]
             [full.core.config :refer [opt]]
             [full.metrics :refer [timeit gauge]]
-            [full.core.sugar :refer :all])
+            [full.core.sugar :refer :all]
+            [clojure.string :as string])
   (:import (java.util.concurrent Executors)))
 
 
@@ -44,7 +45,9 @@
                "sqlite3" kdb/sqlite3
                "h2" #(-> (kdb/h2 %)
                          ; see https://github.com/korma/Korma/issues/273#issuecomment-71812754
-                         (assoc :delimiters ""))})
+                         (assoc :delimiters ""
+                                :naming {:keys string/lower-case
+                                         :fields string/upper-case}))})
 
 (defn- create-connection []
   (let [spec (or (get db-specs @adapter) {})
