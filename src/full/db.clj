@@ -5,7 +5,8 @@
             [korma.config :refer [extract-options]]
             [hikari-cp.core :refer [make-datasource]]
             [full.core.config :refer [opt]]
-            [full.metrics :refer [timeit gauge]])
+            [full.metrics :refer [timeit gauge]]
+            [full.core.sugar :refer :all])
   (:import (java.util.concurrent Executors)))
 
 
@@ -14,6 +15,7 @@
 (def ^:private adapter (opt [:db :adapter] :default "mysql"))
 (def ^:private server-name (opt [:db :server-name] :default nil))
 (def ^:private database-name (opt [:db :database-name] :default nil))
+(def ^:private url (opt [:db :url] :default nil))
 (def ^:private port-number (opt [:db :port-number] :default nil))
 (def ^:private username (opt [:db :username] :default nil))
 (def ^:private password (opt [:db :password] :default nil))
@@ -43,27 +45,27 @@
                "h2" kdb/h2})
 
 (defn- create-connection []
-  (let [spec (or (get db-specs @adapter)
-                 (throw (RuntimeException. (str "Unsupported database adapter: "
-                                                @adapter))))
-        config {:adapter @adapter
-                :server-name @server-name
-                :database-name @database-name
-                :port-number @port-number
-                :username @username
-                :password @password
-                :auto-commit @auto-commit
-                :read-only @read-only
-                :connection-test-query @connection-test-query
-                :connection-timeout @connection-timeout
-                :validation-timeout @validation-timeout
-                :idle-timeout @idle-timeout
-                :max-lifetime @max-lifetime
-                :minimum-idle @minimum-idle
-                :maximum-pool-size @maximum-pool-size
-                :pool-name @pool-name
-                :leak-detection-threshold @leak-detection-threshold
-                :register-mbeans @register-mbeans}
+  (let [spec (or (get db-specs @adapter) {})
+        config (?hash-map
+                 :adapter @adapter
+                 :server-name @server-name
+                 :database-name @database-name
+                 :port-number @port-number
+                 :url @url
+                 :username @username
+                 :password @password
+                 :auto-commit @auto-commit
+                 :read-only @read-only
+                 :connection-test-query @connection-test-query
+                 :connection-timeout @connection-timeout
+                 :validation-timeout @validation-timeout
+                 :idle-timeout @idle-timeout
+                 :max-lifetime @max-lifetime
+                 :minimum-idle @minimum-idle
+                 :maximum-pool-size @maximum-pool-size
+                 :pool-name @pool-name
+                 :leak-detection-threshold @leak-detection-threshold
+                 :register-mbeans @register-mbeans)
         ds (make-datasource config)]
     (doseq [[prop val] @data-source-properties]
       (.addDataSourceProperty ds (name prop) val))
