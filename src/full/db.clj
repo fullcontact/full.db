@@ -42,7 +42,9 @@
                "mssql" kdb/mssql
                "msaccess" kdb/msaccess
                "sqlite3" kdb/sqlite3
-               "h2" kdb/h2})
+               "h2" #(-> (kdb/h2 %)
+                         ; see https://github.com/korma/Korma/issues/273#issuecomment-71812754
+                         (assoc :delimiters ""))})
 
 (defn- create-connection []
   (let [spec (or (get db-specs @adapter) {})
