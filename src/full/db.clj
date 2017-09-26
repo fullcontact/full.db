@@ -33,7 +33,8 @@
 (def ^:private leak-detection-threshold (opt [:db :leak-detection-threshold] :default 0))
 (def ^:private register-mbeans (opt [:db :register-mbeans] :default false))
 (def ^:private data-source-properties (opt [:db :properties] :default {}))
-
+(def ^:private driver-class-name (opt [:db :driver-class-name] :default nil))
+(def ^:private jdbc-url (opt [:db :jdbc-url] :default nil))
 
 (def db-specs {"firebird" kdb/firebird
                "postgres" kdb/postgres
@@ -52,7 +53,7 @@
 (defn- create-connection []
   (let [spec (or (get db-specs @adapter) {})
         config (?hash-map
-                 :adapter @adapter
+                 :adapter (when (nil? @driver-class-name) @adapter)
                  :server-name @server-name
                  :database-name @database-name
                  :port-number @port-number
@@ -70,7 +71,9 @@
                  :maximum-pool-size @maximum-pool-size
                  :pool-name @pool-name
                  :leak-detection-threshold @leak-detection-threshold
-                 :register-mbeans @register-mbeans)
+                 :register-mbeans @register-mbeans
+                 :driver-class-name @driver-class-name
+                 :jdbc-url @jdbc-url)
         ds (make-datasource config)]
     (doseq [[prop val] @data-source-properties]
       (.addDataSourceProperty ds (name prop) val))

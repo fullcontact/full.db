@@ -7,7 +7,7 @@
   :deploy-repositories [["releases" {:url "https://clojars.org/repo/" :creds :gpg}]]
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [korma "0.4.3"]
-                 [hikari-cp "1.7.5"]
+                 [hikari-cp "1.8.0"]
                  [fullcontact/full.core "1.0.4" :exclusions [org.clojure/clojurescript]]
                  [fullcontact/full.metrics "0.11.4"]
                  [fullcontact/full.async "1.0.0"]
