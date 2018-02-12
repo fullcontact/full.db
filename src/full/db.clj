@@ -2,6 +2,7 @@
   (:require [clojure.core.async :refer [chan >!! close!]]
             [clojure.core.async.impl.concurrent :refer [counted-thread-factory]]
             [korma.db :refer [default-connection create-db mysql with-db] :as kdb]
+            [korma.core :refer [exec-raw]]
             [korma.config :refer [extract-options]]
             [hikari-cp.core :refer [make-datasource]]
             [full.core.config :refer [opt]]
@@ -133,3 +134,10 @@
   `(do-async
      (timeit ~k
              ~@body)))
+
+(defn ping> []
+  (do-async
+    (-> (exec-raw ["/* ping */ SELECT 1"] :results)
+        first
+        :1
+        (= 1))))
