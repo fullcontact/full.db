@@ -74,20 +74,29 @@
                     :driver-class-name @driver-class-name
                     :jdbc-url @jdbc-url)))
 
-(defn- create-connection []
+(defn- create-connection
+  [& {:keys [opts default-connection?]
+      :or {default-connection? true}}]
   (let [spec (or (get db-specs @adapter) {})
-        config @default-config
+        config (conj @default-config opts)
         ds (make-datasource config)]
     (doseq [[prop val] @data-source-properties]
       (.addDataSourceProperty ds (name prop) val))
-    (default-connection
-      {:pool {:datasource ds}
-       :options (extract-options (spec {}))})))
+    (let [conn {:pool {:datasource ds}
+                :options (extract-options (spec {}))}]
+      (cond-> conn default-connection? default-connection))))
 
 (def db (delay (create-connection)))
 
 (defn get-connection []
   (kdb/get-connection @db))
+
+(defn get-custom-connection
+  [& {:keys [default-connection? opts]
+      :or {default-connection? false}}]
+  (kdb/get-connection
+    (create-connection :default-connection? default-connection?
+                       :opts opts)))
 
 (defmacro do
   [& body]
