@@ -51,30 +51,32 @@
                                 :naming {:keys string/lower-case
                                          :fields string/upper-case}))})
 
+(def ^:private default-config
+  (delay (?hash-map :adapter (when-not @driver-class-name @adapter)
+                    :server-name @server-name
+                    :database-name @database-name
+                    :port-number @port-number
+                    :url @url
+                    :username @username
+                    :password @password
+                    :auto-commit @auto-commit
+                    :read-only @read-only
+                    :connection-test-query @connection-test-query
+                    :connection-timeout @connection-timeout
+                    :validation-timeout @validation-timeout
+                    :idle-timeout @idle-timeout
+                    :max-lifetime @max-lifetime
+                    :minimum-idle @minimum-idle
+                    :maximum-pool-size @maximum-pool-size
+                    :pool-name @pool-name
+                    :leak-detection-threshold @leak-detection-threshold
+                    :register-mbeans @register-mbeans
+                    :driver-class-name @driver-class-name
+                    :jdbc-url @jdbc-url)))
+
 (defn- create-connection []
   (let [spec (or (get db-specs @adapter) {})
-        config (?hash-map
-                 :adapter (when (nil? @driver-class-name) @adapter)
-                 :server-name @server-name
-                 :database-name @database-name
-                 :port-number @port-number
-                 :url @url
-                 :username @username
-                 :password @password
-                 :auto-commit @auto-commit
-                 :read-only @read-only
-                 :connection-test-query @connection-test-query
-                 :connection-timeout @connection-timeout
-                 :validation-timeout @validation-timeout
-                 :idle-timeout @idle-timeout
-                 :max-lifetime @max-lifetime
-                 :minimum-idle @minimum-idle
-                 :maximum-pool-size @maximum-pool-size
-                 :pool-name @pool-name
-                 :leak-detection-threshold @leak-detection-threshold
-                 :register-mbeans @register-mbeans
-                 :driver-class-name @driver-class-name
-                 :jdbc-url @jdbc-url)
+        config @default-config
         ds (make-datasource config)]
     (doseq [[prop val] @data-source-properties]
       (.addDataSourceProperty ds (name prop) val))
