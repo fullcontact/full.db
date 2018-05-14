@@ -91,7 +91,7 @@
 
 (defmacro do
   [& body]
-  `(with-db @db ~@body))
+  ~@body)
 
 (def thread-macro-executor
   (delay (Executors/newFixedThreadPool
@@ -126,7 +126,7 @@
      (thread-call
        (fn []
          (try
-           (with-db @db ~@body)
+           ~@body
            (catch Throwable e# e#)
            (finally
              (gauge g# (swap! do-async-gauge dec))))))))
